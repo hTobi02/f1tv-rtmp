@@ -17,13 +17,13 @@ while $true; do
   if [[ $URL -eq "null" ]]; then
     echo "No LiveStream"
   else
-    if [[ -v $RECORD ]]; then
+    #if [[ -v $RECORD ]]; then
       #Play session with streamlink and send it with ffmpeg to a rtmp stream server
-      streamlink $URL best --hls-audio-select="de" --record-and-pipe /dev/null | ffmpeg -re -i pipe: -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/f1tv
-    else
-	  GLOBALNAME=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO")][0].emfAttributes.Global_Title')
-	  streamlink $URL best --hls-audio-select="de" --record-and-pipe "/record/$GLOBALNAME.mp4" | ffmpeg -re -i pipe: -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/f1tv
-	fi
+      streamlink $URL best --hls-audio-select="de" --hls-duration 02:30:00 --record-and-pipe /dev/null | ffmpeg -hide_banner -loglevel quiet -stats -re -i pipe: -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/f1tv
+    #else
+	#  GLOBALNAME=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO")][0].emfAttributes.Global_Title')
+	#  streamlink $URL best --hls-audio-select="de" --record-and-pipe "/record/$GLOBALNAME.mp4" | ffmpeg -re -i pipe: -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/f1tv
+	#fi
   fi
   
   #Check status of live session every 5 minutes to avoid ip temp ban
