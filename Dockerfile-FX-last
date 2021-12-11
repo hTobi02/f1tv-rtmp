@@ -82,4 +82,5 @@ RUN apt install -y jq
 WORKDIR /app
 COPY ./app/ .
 EXPOSE 1935
+HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
 CMD bash /app/entrypoint-last-fx.sh

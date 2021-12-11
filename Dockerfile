@@ -15,5 +15,7 @@ WORKDIR /app
 COPY ./app/ .
 RUN rm -R /usr/local/nginx/html/players
 COPY ./player.html /usr/local/nginx/html
+RUN rm /etc/nginx/nginx.conf
+COPY ./nginx_hls.conf /etc/nginx/nginx.conf
 EXPOSE 1935
 CMD bash /app/entrypoint-last.sh

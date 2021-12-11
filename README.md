@@ -15,6 +15,7 @@
 ## ToDo
 [x] Add other languages (german and english) \
 [x] Remove audio/video desync \
-[ ] Add HLS and/or DASH \
+[x] Add Healthcheck \
 [ ] Use Alpine Image \
+[ ] Add HLS \
 [ ] Add Recording Feature
