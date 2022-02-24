@@ -46,10 +46,10 @@ while $true; do
     if [ $RECORD = "true" ]; then
       GLOBALNAME=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO")][0].emfAttributes.Global_Title')
       echo GLOBALNAME: $GLOBALNAME
-      ffmpeg -n -i $URL -map 0:p:5:v -map 0:a -c copy "/record/$GLOBALNAME.mp4"
+      ffmpeg -hide_banner -n -i $URL -map 0:p:5:v -map 0:a -c copy "/record/$GLOBALNAME.mp4"
     else
       #Play session with ffmpeg and send it to a rtmp stream server
-      ffmpeg -re -i $URL -map 0:p:5:v -map $MAP -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/f1tv
+      ffmpeg -hide_banner -re -i $URL -map 0:p:5:v -map $MAP -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/f1tv
 	fi
   fi
   
