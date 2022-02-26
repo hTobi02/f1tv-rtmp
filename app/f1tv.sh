@@ -1,21 +1,5 @@
 #!/bin/bash
 
-#if [[ $LANGUAGE="deu" ]]; then
-#  MAP="0:18"
-#elif [[ $LANGUAGE="fra" ]]; then
-#  MAP="0:19"
-#elif [[ $LANGUAGE="spa" ]]; then
-#  MAP="0:20"
-#elif [[ $LANGUAGE="nld" ]]; then
-#  MAP="0:21"
-#elif [[ $LANGUAGE="por" ]]; then
-#  MAP="0:22"
-#elif [[ $LANGUAGE="eng" ]]; then
-#  MAP="0:24"
-#else
-#  MAP="0:23"
-#fi
-
 #Insert data from envs
 DATA=$(echo '{"Login": "'$F1TV_EMAIL'", "Password": "'$F1TV_PASSWORD'"}')
 MAP="0:m:language:$LANGUAGE?"
@@ -50,7 +34,7 @@ while $true; do
     else
       #Play session with ffmpeg and send it to a rtmp stream server
       ffmpeg -hide_banner -re -i $URL -map 0:p:5:v -map $MAP -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/f1tv
-	fi
+	  fi
   fi
   
   #Check status of live session every 5 minutes to avoid ip temp ban

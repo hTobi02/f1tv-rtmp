@@ -68,14 +68,15 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 
 # End of nginx
 
-RUN DEBIAN_FRONTEND="noninteractive" apt update && apt-get -y install tzdata
-RUN apt update && \
-	apt install python3 python3-pip -y
+# streamlink
+#RUN DEBIAN_FRONTEND="noninteractive" apt update && apt-get -y install tzdata
+#RUN apt update && \
+#	apt install python3 python3-pip -y
 
-RUN python3 -m pip install --upgrade pip && \
-	pip install streamlink
+#RUN python3 -m pip install --upgrade pip && \
+#	pip install streamlink
 
-COPY f1tv.py /usr/local/lib/python3.9/dist-packages/streamlink/plugins/
+#COPY f1tv.py /usr/local/lib/python3.9/dist-packages/streamlink/plugins/
 
 RUN apt install -y jq
 
