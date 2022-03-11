@@ -78,7 +78,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 
 #COPY f1tv.py /usr/local/lib/python3.9/dist-packages/streamlink/plugins/
 
-RUN apt install -y jq
+RUN apt update && apt install -y jq
 
 WORKDIR /app
 COPY ./app/ .
