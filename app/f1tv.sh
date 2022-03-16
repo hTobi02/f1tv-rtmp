@@ -4,11 +4,17 @@
 DATA=$(echo '{"Login": "'$F1TV_EMAIL'", "Password": "'$F1TV_PASSWORD'"}')
 MAP="0:m:language:$LANGUAGE?"
 
+if [ -z $OUTPUT ]; then
+  OUTPUT='rtmp://127.0.0.1:1935/live/f1tv'
+fi
+
 echo "---- SETTINGS ----"
 echo DATA: "$DATA"
 echo MAP: "$MAP"
 echo LIVE: "$LIVE"
 echo RECORD: "$RECORD"
+echo OUTPUT: "$OUTPUT"
+
 while $true; do
   #Get your AccessToken
   AccessToken=$(curl -s --request POST --url https://api.formula1.com/v2/account/subscriber/authenticate/by-password --header 'Content-Type: application/json' --header 'User-Agent: RaceControl f1viewer' --header 'apiKey: fCUCjWrKPu9ylJwRAv8BpGLEgiAuThx7' --data "$DATA" | jq -r '.data.subscriptionToken')
@@ -35,7 +41,7 @@ while $true; do
     ffmpeg -hide_banner -n -i "$URL" -map 0:p:5:v -map 0:a -c copy "/record/$GLOBALNAME.mp4"
   elif [ "$RECORD" = "false" ]; then
     #Play session with ffmpeg and send it to a rtmp stream server
-    ffmpeg -hide_banner -re -i "$URL" -map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/f1tv
+    ffmpeg -hide_banner -re -i "$URL" -map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f flv $OUTPUT
   else
     echo "error"
   fi
