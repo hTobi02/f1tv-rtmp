@@ -27,6 +27,7 @@ F1TV_PASSWORD|Type in your F1TV Password|SuperSecretPassword
 LANGUAGE|in which language do you prefer watching F1|fx
 LIVE|do you want to only see live events|true
 RECORD|do you want to record <br>*(**IMPORTANT**: This disables the rtmp stream)*|false
+OUTPUT|where do you want to output the stream|rtmp://mycoolvideoserver/live/f1tv
 
 <br>
 
