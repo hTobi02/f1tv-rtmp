@@ -1,32 +1,8 @@
 version: '3.3'
 services:
-    f1tv-en:
+    f1tv:
         env_file:
             - .env
-        environment:
-            - LANGUAGE=eng
-            - LIVE=true
-            - RECORD=false
-        image: 'htobi02/f1tv:${TAG:-latest}'
-        labels:
-          - "com.centurylinklabs.watchtower.scope=f1tv"
-    f1tv-de:
-        env_file:
-            - .env
-        environment:
-            - LANGUAGE=deu
-            - LIVE=true
-            - RECORD=false
-        image: 'htobi02/f1tv:${TAG:-latest}'
-        labels:
-          - "com.centurylinklabs.watchtower.scope=f1tv"
-    f1tv-fx:
-        env_file:
-            - .env
-        environment:
-            - LANGUAGE=fx
-            - LIVE=true
-            - RECORD=false
         image: 'htobi02/f1tv:${TAG:-latest}'
         labels:
           - "com.centurylinklabs.watchtower.scope=f1tv"
