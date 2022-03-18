@@ -18,9 +18,9 @@ fi
 if [ -z $RECORD ]; then
   RECORD=false
 fi
-if [ -z $OUTPUT ] & [ $RECORD == true ]; then
+if [[ -z $OUTPUT && $RECORD == true ]]; then
   OUTPUT='/record'
-elif [ -z $OUTPUT ] & [ $RECORD == false ]; then
+elif [[ -z $OUTPUT && $RECORD == false ]]; then
   OUTPUT='rtmp://127.0.0.1:1935/live/f1tv'
 fi
 
