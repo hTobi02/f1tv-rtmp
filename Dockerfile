@@ -58,8 +58,8 @@ RUN apt-get update && \
 # Change language
 RUN locale-gen de_DE.UTF-8
 ENV LANG de_DE.UTF-8
-ENV LANGUAGE de_DE:de
-ENV LC_ALL de_DE.UTF-8
+#ENV LANGUAGE de_DE:de
+#ENV LC_ALL de_DE.UTF-8
 ENV TZ="Europe/Berlin"
 RUN dpkg-reconfigure locales
 # Forward logs to Docker
