@@ -23,7 +23,7 @@ if [[ -z $OUTPUT && $RECORD == true ]]; then
 elif [[ -z $OUTPUT && $RECORD == false ]]; then
   OUTPUT='rtmp://127.0.0.1:1935/live/f1tv'
 fi
-
+sleep 5
 DATA=$(echo '{"Login": "'$F1TV_EMAIL'", "Password": "'$F1TV_PASSWORD'"}')
 MAP="0:m:language:$LANGUAGE?"
 
@@ -37,7 +37,7 @@ echo OUTPUT: "$OUTPUT"
 while $true; do
   #Get your AccessToken
   AccessToken=$(curl -s --request POST --url https://api.formula1.com/v2/account/subscriber/authenticate/by-password --header 'Content-Type: application/json' --header 'User-Agent: RaceControl f1viewer' --header 'apiKey: fCUCjWrKPu9ylJwRAv8BpGLEgiAuThx7' --data "$DATA" | jq -r '.data.subscriptionToken')
-
+  
   if [ $LIVE = "true" ]
   then
     #Only stream live sessions
@@ -52,24 +52,24 @@ while $true; do
   if [ "$URL" = "null" ]
   then
     echo "ERROR: URL is null. Maybe there is no live stream?"
-    exit
-  fi
-  if [ $RECORD = "true" ]; then
-    GLOBALNAME=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO")][0].emfAttributes.Global_Title')
-    echo GLOBALNAME: "$GLOBALNAME"
-    ffmpeg -hide_banner -n -i "$URL" -map 0:p:5:v -map 0:a -c copy "$OUTPUT/$GLOBALNAME.mp4"
-  elif [ $RECORD = "false" ]; then
-    #Play session with ffmpeg and send it to a rtmp stream server
-    ffmpeg -hide_banner -re -i "$URL" -map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f flv $OUTPUT
   else
-    echo "error"
+    if [ $RECORD = "true" ]; then
+      GLOBALNAME=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO")][0].emfAttributes.Global_Title')
+      echo GLOBALNAME: "$GLOBALNAME"
+      ffmpeg -hide_banner -loglevel warning -stats -n -i "$URL" -map 0:p:5:v -map 0:a -c copy "$OUTPUT/$GLOBALNAME.mp4"
+    elif [ $RECORD = "false" ]; then
+      #Play session with ffmpeg and send it to a rtmp stream server
+      ffmpeg -hide_banner -loglevel warning -stats -re -i "$URL" -map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f flv $OUTPUT
+    else
+      echo "error"
+    fi
   fi
 
+  echo "---- DEBUG ----"
+  echo "AccessToken: $AccessToken"
+  echo "ContentId $ContentId"
+  echo "URL: $URL"
+  
   #Check status of live session every 5 minutes to avoid ip temp ban
-  #echo "---- DEBUG ----"
-  #echo DATA: "$DATA"
-  #echo AccessToken: "$AccessToken"
-  #echo ContentId "$ContentId"
-  #echo URL: "$URL"
   sleep 5m
 done

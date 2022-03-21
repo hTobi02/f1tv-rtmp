@@ -48,7 +48,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Set up config file
-COPY nginx.conf /etc/nginx/nginx.conf
+#COPY ./config/nginx/nginx-hls.conf /etc/nginx/nginx.conf
 
 # Install dependencies
 RUN apt-get update && \
@@ -58,8 +58,8 @@ RUN apt-get update && \
 # Change language
 RUN locale-gen de_DE.UTF-8
 ENV LANG de_DE.UTF-8
-ENV LANGUAGE de_DE:de
-ENV LC_ALL de_DE.UTF-8
+#ENV LANGUAGE de_DE:de
+#ENV LC_ALL de_DE.UTF-8
 ENV TZ="Europe/Berlin"
 RUN dpkg-reconfigure locales
 # Forward logs to Docker
@@ -85,9 +85,11 @@ COPY ./app/ .
 #RUN rm -R /usr/local/nginx/html/players
 RUN mkdir -p /usr/local/nginx/html
 #COPY ./player.html /usr/local/nginx/html
-COPY ./player.html /srv/www/
-RUN chmod 0777 /srv/www/player.html
+COPY ./configs/www/index.html /srv/www/
+COPY ./configs/www/favicon.ico /srv/www/
+RUN chmod -R 777 /srv/www/
 RUN rm /etc/nginx/nginx.conf
-COPY ./nginx_hls.conf /etc/nginx/nginx.conf
+COPY ./configs/nginx/nginx_hls.conf /etc/nginx/nginx.conf
+COPY ./configs/www/stat.xsl /stat.xsl
 EXPOSE 1935
 CMD bash /app/entrypoint.sh

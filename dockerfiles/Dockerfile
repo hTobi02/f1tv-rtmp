@@ -48,8 +48,8 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Set up config file
-COPY nginx.conf /etc/nginx/nginx.conf
-
+COPY ./configs/nginx/nginx.conf /etc/nginx/nginx.conf
+RUN touch /tmp/nginx-access.log && touch /tmp/nginx-error.log
 # Install dependencies
 RUN apt-get update && \
     apt-get install -y ffmpeg locales && \

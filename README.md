@@ -6,16 +6,18 @@
 ## <b>Installation-Docker</b>
 
 If you want to get a rtmp stream of live events use: \
-`docker run -d -p 1935:1935 -e F1TV_EMAIL="<YOUR F1TV EMAIL>" -e F1TV_PASSWORD="<YOUR F1TV PASSWORD>" -e LANGUAGE=<LANG-CODE> -e LIVE=true -e RECORD=false htobi02/f1tv:latest`
+`docker run -d -p 1935:1935 -p 80:80 -e F1TV_EMAIL="<YOUR F1TV EMAIL>" -e F1TV_PASSWORD="<YOUR F1TV PASSWORD>" -e LANGUAGE=<LANG-CODE> -e LIVE=true -e RECORD=false htobi02/f1tv:latest`
 
 If you want to get a rtmp stream of the most recent event use: \
-`docker run -d -p 1935:1935 -e F1TV_EMAIL="<YOUR F1TV EMAIL>" -e F1TV_PASSWORD="<YOUR F1TV PASSWORD>" -e LANGUAGE=<LANG-CODE> -e LIVE=false -e RECORD=false htobi02/f1tv:latest`
+`docker run -d -p 1935:1935 -p 80:80 -e F1TV_EMAIL="<YOUR F1TV EMAIL>" -e F1TV_PASSWORD="<YOUR F1TV PASSWORD>" -e LANGUAGE=<LANG-CODE> -e LIVE=false -e RECORD=false htobi02/f1tv:latest`
 
 If you want to record all upcoming live events use (NOTE: This disables the rtmp stream!): \
 `docker run -d -e F1TV_EMAIL="<YOUR F1TV EMAIL>" -e F1TV_PASSWORD="<YOUR F1TV PASSWORD>" -e LANGUAGE=<LANG-CODE> -e LIVE=true -e RECORD=true -v </HOST/PATH/TO/SAVE/RECORDS>:/record htobi02/f1tv:latest`
 
 If you want to record the most recent event use (NOTE: This disables the rtmp stream!): \
 `docker run -d -e F1TV_EMAIL="<YOUR F1TV EMAIL>" -e F1TV_PASSWORD="<YOUR F1TV PASSWORD>" -e LANGUAGE=<LANG-CODE> -e LIVE=false -e RECORD=true -v </HOST/PATH/TO/SAVE/RECORDS>:/record htobi02/f1tv:latest`
+
+After running you can watch under `rtmp://localhost:1935/live/f1tv` or `http://localhost/f1tv.m3u8`
 
 
 ## <b>Docker-compose</b>
@@ -58,5 +60,5 @@ fx|*FX Audio Track (**No Commentators**)*
 [x] Remove audio/video desync \
 [x] Add Healthcheck \
 [ ] Use Alpine Image \
-[ ] Add HLS \
-[ ] Add Recording Feature
+[x] Add HLS \
+[x] Add Recording Feature

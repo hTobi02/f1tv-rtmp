@@ -1,0 +1,6 @@
+version: '3.3'
+services:
+    f1tv:
+        env_file:
+            - .env
+        build: dockerfiles/Dockerfile-hls
