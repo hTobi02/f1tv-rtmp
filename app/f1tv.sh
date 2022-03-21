@@ -41,10 +41,10 @@ while $true; do
   if [ $LIVE = "true" ]
   then
     #Only stream live sessions
-    ContentId=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO") | select(.contentSubtype == "LIVE")][0].contentId')
+    ContentId=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO") | select((.titleBrief == "Rennen") or (.titleBrief == "Qualifying") or (.titleBrief | startswith("Training"))) | select(.contentSubtype == "LIVE")][0].contentId')
   else
     #Stream the last session
-    ContentId=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO")][0].contentId')
+    ContentId=$(curl -s --request GET --url https://f1tv.formula1.com/2.0/R/DEU/BIG_SCREEN_HLS/ALL/PAGE/395/F1_TV_Pro_Annual/2 | jq -r '[.resultObj.containers[].retrieveItems.resultObj.containers[].metadata | select(.contentType == "VIDEO") | select((.titleBrief == "Rennen") or (.titleBrief == "Qualifying") or (.titleBrief | startswith("Training")))][0].contentId')
   fi
 
   #Get Stream URL
@@ -59,7 +59,29 @@ while $true; do
       ffmpeg -hide_banner -loglevel warning -stats -n -i "$URL" -map 0:p:5:v -map 0:a -c copy "$OUTPUT/$GLOBALNAME.mp4"
     elif [ $RECORD = "false" ]; then
       #Play session with ffmpeg and send it to a rtmp stream server
-      ffmpeg -hide_banner -loglevel warning -stats -re -i "$URL" -map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f flv $OUTPUT
+      echo '#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=415000,RESOLUTION=480x270
+f1tv_mini.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=677000,RESOLUTION=512x288
+f1tv_low.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=1200000,RESOLUTION=640x360
+f1tv_mid.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=1993000,RESOLUTION=960x540
+f1tv_high.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=3730000,RESOLUTION=1280x720
+f1tv_hd.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=6286000,RESOLUTION=1920x1080
+f1tv_fhd.m3u8
+' > /srv/www/f1tv.m3u8
+      ffmpeg -hide_banner -loglevel warning -re -i "$URL" \
+-map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f flv $OUTPUT \
+-map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 4 -hls_playlist_type event -hls_list_size 10 /srv/www/f1tv_fhd.m3u8 \
+-map 0:p:4:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 4 -hls_playlist_type event -hls_list_size 10 /srv/www/f1tv_hd.m3u8 \
+-map 0:p:3:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 4 -hls_playlist_type event -hls_list_size 10 /srv/www/f1tv_high.m3u8 \
+-map 0:p:0:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 4 -hls_playlist_type event -hls_list_size 10 /srv/www/f1tv_mid.m3u8 \
+-map 0:p:2:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 4 -hls_playlist_type event -hls_list_size 10 /srv/www/f1tv_low.m3u8 \
+-map 0:p:1:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 4 -hls_playlist_type event -hls_list_size 10 /srv/www/f1tv_mini.m3u8
     else
       echo "error"
     fi

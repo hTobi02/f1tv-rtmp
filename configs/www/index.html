@@ -1,25 +1,54 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <link href="https://vjs.zencdn.net/7.8.4/video-js.css" rel="stylesheet" />
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <title>Livestream</title>
+        <link rel="icon" href="favicon.ico">
+        <link rel="stylesheet" href="assets/style.css">
+        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr/dist/clappr.min.js"></script>
+        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-stats/dist/clappr-stats.min.js"></script>
+        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-nerd-stats/dist/clappr-nerd-stats.min.js"></script>
+        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-pip-plugin/dist/clappr-pip-plugin.js"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
 </head>
-<body>
-  <video
-    id="my-video"
-    class="video-js"
-    controls
-    preload="auto"
-    width="1280"
-    height="720"
-    data-setup="{}">
-    <source src="f1tv.m3u8" type="application/vnd.apple.mpegurl" />
-    <p class="vjs-no-js">
-      To view this video please enable JavaScript, and consider upgrading to a
-      web browser that
-      <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-    </p>
-  </video>
-  <p>For watching via VLC open following Link in VLC: <br>https://f1tv.minenbauer.de/f1tv.m3u8</p>
-  <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
-</body>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Start watching</h1>
+            <p>Click on the play button to start watching. If you see an error, the stream is not live yet. In this case, try again a little later.</p>
+        
+            <div id="player"></div>
+          </div>
+    </body>
+    <script>
+        new Clappr.Player({
+
+            //** Standard clappr.io Options **
+            // Use custom source
+            sources: ["f1tv.m3u8"],
+
+            // Plugins
+            plugins: [ClapprNerdStats, ClapprStats, ClapprPIPPlugin, LevelSelector],
+
+            clapprNerdStats: {
+                iconPosition: 'none'
+            },
+            autoPlay: true, 
+            // Disable m3u8 preload to prevent error on page load
+            hlsPlayback: {
+                preload: true
+            },
+
+            // Set a custom poster
+            poster: "assets/default.jpg",
+
+            // Assign parent by id
+            parentId: "#player",
+
+            // Set dimensions and media control delay
+            height: "100%",
+            width: "100%",
+            hideMediaControlDelay: 1000
+        })
+    </script>
 </html>
