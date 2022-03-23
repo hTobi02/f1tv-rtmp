@@ -74,7 +74,7 @@ f1tv_hd.m3u8
 #EXT-X-STREAM-INF:BANDWIDTH=6286000,RESOLUTION=1920x1080
 f1tv_fhd.m3u8
 ' > /srv/www/f1tv.m3u8
-      ffmpeg -hide_banner -loglevel warning -re -i "$URL" \
+      ffmpeg -y -hide_banner -loglevel warning -re -i "$URL" \
 -map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f flv $OUTPUT \
 -map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 4 -hls_playlist_type event -hls_list_size 10 /srv/www/f1tv_fhd.m3u8 \
 -map 0:p:4:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 4 -hls_playlist_type event -hls_list_size 10 /srv/www/f1tv_hd.m3u8 \
