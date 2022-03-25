@@ -6,7 +6,7 @@
 
         <link rel="icon" href="favicon.ico">
 
-        <link rel="stylesheet" href="/styles.css">
+        <link rel="stylesheet" href="styles.css">
 
         <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr/dist/clappr.min.js"></script>
         <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-stats/dist/clappr-stats.min.js"></script>
@@ -15,21 +15,37 @@
         <script type="text/javascript" src="//cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
     </head>
 
-    <body>
-        <nav class="bg-f1logos22-f1 border-gray-200 px-2 py-2.5 dark:bg-gray-800">
-            <div class="container flex flex-wrap justify-between items-center mx-auto">
-              <div class="flex items-center">
-                  <!--<div class="block dark:hidden h-auto w-20 text-white">F1™</div>-->
-                  <img alt="F1 Logo" class="hidden dark:block h-auto w-20" src="/assets/F1_dark.png">
-                  <img alt="F1 Logo" class="block dark:hidden h-auto w-20" src="/assets/F1_light.png">
-              </div>
+    <body class="flex flex-col h-screen justify-between">
+        <header>
+            <nav class="bg-f1logos22-f1 border-gray-200 px-2 py-2.5 dark:bg-gray-800">
+                <div class="container flex flex-wrap justify-between items-center mx-auto">
+                <div class="flex items-center">
+                    <img alt="F1 Logo" class="hidden dark:block h-auto w-20" src="assets/F1_dark.png">
+                    <img alt="F1 Logo" class="block dark:hidden h-auto w-20" src="assets/F1_light.png">               
+                </div>
+                <div class="flex items-center">
+                    <a href="index.html" class=" text-f1logos22-f1">Watch</a>
+                    <a target=_blank href="https://www.formula1.com/en/results.html/2022/drivers.html" class="px-10 text-f1logos22-f1">Ranking</a>
+                </div>
+                <div class="flex items-center">
+                    <a alt="Instagram" target=_blank href="https://instagram.com/f1" class="text-f1logos22-f1"><img class="grayscale h-auto w-7" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"></img></a>
+                   
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div class="container text-center items-center max-w-screen-lg mx-auto pb-10">
+                <div class="text-5xl mt-10">Start watching</div>
+                <p class="text-base">Click on the play button to start watching. If you see an error, the stream is not live yet. In this case, try again a little later.</p>
+                <div id="player" class="mt-10"></div>
             </div>
-          </nav>
-          <div class="container text-center items-center max-w-screen-lg mx-auto pb-10">
-              <div class="text-5xl mt-10">Start watching</div>
-              <p class="text-base">Click on the play button to start watching. If you see an error, the stream is not live yet. In this case, try again a little later.</p>
-            <div id="player" class="mt-10"></div>
-          </div>
+        </main>
+        <footer class="bg-gray-200 text-center lg:text-left w-full dark:bg-gray-900 static bottom-0">
+            <div class="text-gray-700 text-center p-4">
+            © 2022 Copyright:
+            <a class="text-gray-800" href="https://github.com/seniorheld/f1tv-rtmp">SeniorHeld</a>
+            </div>
+        </footer>
     </body>
         
       <script>
