@@ -15,35 +15,38 @@
         <script type="text/javascript" src="//cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
     </head>
 
-    <body class="flex flex-col h-screen justify-between">
+    <body class="flex flex-col min-h-screen scroll-smooth">
         <header>
-            <nav class="bg-f1logos22-f1 border-gray-200 px-2 py-2.5 dark:bg-gray-800">
-                <div class="container flex flex-wrap justify-between items-center mx-auto">
-                <div class="flex items-center">
-                    <img alt="F1 Logo" class="hidden dark:block h-auto w-20" src="assets/F1_dark.png">
-                    <img alt="F1 Logo" class="block dark:hidden h-auto w-20" src="assets/F1_light.png">               
-                </div>
-                <div class="flex items-center">
-                    <a href="index.html" class=" text-f1logos22-f1">Watch</a>
-                    <a target=_blank href="https://www.formula1.com/en/results.html/2022/drivers.html" class="px-10 text-f1logos22-f1">Ranking</a>
-                </div>
-                <div class="flex items-center">
-                    <a alt="Instagram" target=_blank href="https://instagram.com/f1" class="text-f1logos22-f1"><img class="grayscale h-auto w-7" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"></img></a>
-                   
+            <nav class="bg-f1logos22-f1 border-gray-200 px-2 py-2.5 dark:bg-gray-800 fixed inset-x-0 top-0">
+                <div class="container flex flex-wrap justify-between items-center mx-auto max-w-screen-4k">
+                    <div class="flex items-center md:ml-10">
+                        <img alt="F1 Logo" class="hidden dark:block h-auto w-20" src="assets/F1_dark.png">
+                        <img alt="F1 Logo" class="block dark:hidden h-auto w-20" src="assets/F1_light.png">               
+                    </div>
+                    <div class="flex items-center">
+                        <a href="index.html" class="cursor-not-allowed  text-f1logos22-f1 hover:text-white transition-colors duration-300">Watch</a>
+                        <a target=_blank href="https://www.formula1.com/en/results.html/2022/drivers.html" class="px-10 text-f1logos22-f1 hover:text-white transition-colors duration-300">Ranking</a>
+                    </div>
+                    <div class="flex items-center md:mr-10">
+                        <a alt="Instagram" target=_blank href="https://instagram.com/f1" class="text-f1logos22-f1"><img class="grayscale h-auto w-7 hover:grayscale-0 transition duration-300" src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"></img></a>
+                    
+                    </div>
                 </div>
             </nav>
         </header>
-        <main>
-            <div class="container text-center items-center max-w-screen-lg mx-auto pb-10">
-                <div class="text-5xl mt-10">Start watching</div>
+        <main class="mt-20 mb-20">
+            <div class="container text-center items-center mx-auto pb-10 max-h-screen max-w-screen-4k">
+                <div class="text-5xl">Start watching</div>
                 <p class="text-base">Click on the play button to start watching. If you see an error, the stream is not live yet. In this case, try again a little later.</p>
-                <div id="player" class="mt-10"></div>
+                <div class="lg:ml-10 lg:mr-10 mt-10">
+                    <div id="player" class="aspect-video object-contain"></div>
+                </div>
             </div>
         </main>
-        <footer class="bg-gray-200 text-center lg:text-left w-full dark:bg-gray-900 static bottom-0">
+        <footer class="bg-gray-200 text-center lg:text-left dark:bg-gray-900 fixed inset-x-0 bottom-0">
             <div class="text-gray-700 text-center p-4">
-            © 2022 Copyright:
-            <a class="text-gray-800" href="https://github.com/seniorheld/f1tv-rtmp">SeniorHeld</a>
+            Made with ❤️ by 
+            <a class="underline hover:text-gray-500 transition-colors" href="https://github.com/seniorheld/f1tv-rtmp">SeniorHeld</a>
             </div>
         </footer>
     </body>
@@ -53,7 +56,7 @@
 
           //** Standard clappr.io Options **
           // Use custom source
-          sources: ["/f1tv.m3u8"],
+          sources: ["f1tv.m3u8"],
 
           // Plugins
           plugins: [ClapprNerdStats, ClapprStats, ClapprPIPPlugin, LevelSelector],
@@ -80,64 +83,3 @@
       })
       </script>
 </html>
-<!--
-<!DOCTYPE html>
-<html lang="de">
-    <head>
-        <meta charset="UTF-8">
-        <title>Livestream</title>
-        <link rel="icon" href="favicon.ico">
-        <link rel="stylesheet" href="assets/style.css">
-        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr/dist/clappr.min.js"></script>
-        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-stats/dist/clappr-stats.min.js"></script>
-        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-nerd-stats/dist/clappr-nerd-stats.min.js"></script>
-        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-pip-plugin/dist/clappr-pip-plugin.js"></script>
-        <script type="text/javascript" src="//cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
-</head>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Start watching</h1>
-            <p>Click on the play button to start watching. If you see an error, the stream is not live yet. In this case, try again a little later.</p>
-        
-            <div id="player"></div>
-          </div>
-    </body>
-    <script>
-        new Clappr.Player({
-
-            //** Standard clappr.io Options **
-            // Use custom source
-            sources: ["/streams/f1tv_src.m3u8"],
-
-            // Plugins
-            plugins: [ClapprNerdStats, ClapprStats, ClapprPIPPlugin, LevelSelector],
-
-            clapprNerdStats: {
-                iconPosition: 'none'
-            },
-            autoPlay: true, 
-            // Disable m3u8 preload to prevent error on page load
-            hlsPlayback: {
-                preload: true
-            },
-
-            // Set a custom poster
-            poster: "assets/default.jpg",
-
-            // Assign parent by id
-            parentId: "#player",
-
-            // Set dimensions and media control delay
-            height: "100%",
-            width: "100%",
-            hideMediaControlDelay: 1000
-        })
-    </script>
-</html> -->
-
-<!--
-
-ffmpeg -y -hide_banner -loglevel error -stats -hwaccel cuda -i "Z:\data\Filme\4K\Bloodshot (2020).mkv" -map 0:v -map 0:a:1 -c:a aac -ar 48000 -c:v h264_nvenc -ss 00:00:0.0 -t 00:02:0 -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod  -vf "scale=640:trunc(ow/a/2)*2,zscale=transfer=linear,tonemap=tonemap=clip:param=1.0:desat=2:peak=0,zscale=transfer=bt709,format=yuv420p" -x265-params "hdr-opt=1:repeat-headers=1:colorprim=bt2020:transfer=smpte2084:colormatrix=bt2020nc:master-display=G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(40000000,50):max-cll=0,0" -b:v "1M" -hls_segment_filename "C:\Users\tobia\OneDrive\GitHub\f1tv\configs\www\streams/f1tv_src_%03d.ts" "C:\Users\tobia\OneDrive\GitHub\f1tv\configs\www\streams\f1tv_src.m3u8"
-
--->
