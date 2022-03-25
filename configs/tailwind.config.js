@@ -30,6 +30,10 @@ module.exports = {
           Pirelli_Yellow  : '#FED100',
         }
       },
+      screens: {
+        '4k': '3840px',
+        // => @media (min-width: 1536px) { ... }
+      }
     },
   },
   plugins: [require("daisyui")],
