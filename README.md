@@ -59,6 +59,6 @@ fx|*FX Audio Track (**No Commentators**)*
 [x] Add other languages (german and english) \
 [x] Remove audio/video desync \
 [x] Add Healthcheck \
-[ ] Use Alpine Image \
+[x] Use Alpine Image \
 [x] Add HLS \
 [x] Add Recording Feature
