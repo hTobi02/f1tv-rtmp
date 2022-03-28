@@ -30,6 +30,8 @@ LANGUAGE=eng
 LIVE=true
 RECORD=false
 OUTPUT=rtmp://127.0.0.1:1935/live/f1tv
+HLS=false
+REPLAY=false
 ```
 <br>
 
@@ -42,6 +44,8 @@ LANGUAGE|in which language do you prefer watching F1|fx|eng
 LIVE|do you want to only see live events|true|true
 RECORD|do you want to record <br>*(**IMPORTANT**: This disables the rtmp stream)*|false|false
 OUTPUT|where do you want to output the stream|rtmp://mycoolvideoserver/live/f1tv|rtmp://127.0.0.1:1935/live/f1tv
+HLS|if set to true you can watch under <br>"http://[IP]:[PORT]"|false|false
+REPLAY|if set to true you can scrub all the way back to the beginning of the livestreaming|false|false
 
 <br>
 
@@ -51,9 +55,9 @@ deu|*German Audio Track*
 fra|*French Audio Track*
 spa|*Spanish Audio Track*
 por|*Portugese Audio Track*
-nld|*Netherlands Audio Track*
 eng|*English Audio Track*
 fx|*FX Audio Track (**No Commentators**)*
+<!--nld|*Netherlands Audio Track*-->
 
 ## ToDo
 [x] Add other languages (german and english) \

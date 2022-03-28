@@ -18,10 +18,16 @@ fi
 if [ -z $RECORD ]; then
   RECORD=false
 fi
+if [ -z $HLS ]; then
+  HLS=false
+fi
 if [[ -z $OUTPUT && $RECORD == true ]]; then
   OUTPUT='/record'
 elif [[ -z $OUTPUT && $RECORD == false ]]; then
   OUTPUT='rtmp://127.0.0.1:1935/live/f1tv'
+fi
+if [ -z $REPLAY ]; then
+  REPLAY=false
 fi
 
 DATA=$(echo '{"Login": "'$F1TV_EMAIL'", "Password": "'$F1TV_PASSWORD'"}')
@@ -33,6 +39,8 @@ echo MAP: "$MAP"
 echo LIVE: "$LIVE"
 echo RECORD: "$RECORD"
 echo OUTPUT: "$OUTPUT"
+echo REPLAY: "$REPLAY"
+echo HLS: "$HLS"
 
 while $true; do
   #Get your AccessToken
@@ -60,35 +68,52 @@ while $true; do
       ffmpeg -hide_banner -loglevel warning -stats -n -i "$URL" -map 0:p:5:v -map 0:a -c copy "$OUTPUT/$GLOBALNAME.mp4"
     elif [ $RECORD = "false" ]; then
       #Play session with ffmpeg and send it to a rtmp stream server
-      echo '#EXTM3U
-#EXT-X-VERSION:3
-#EXT-X-STREAM-INF:BANDWIDTH=415000,RESOLUTION=480x270
-streams/f1tv_mini.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=677000,RESOLUTION=512x288
-streams/f1tv_low.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=1200000,RESOLUTION=640x360
-streams/f1tv_mid.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=1993000,RESOLUTION=960x540
-streams/f1tv_high.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=3730000,RESOLUTION=1280x720
-streams/f1tv_hd.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=6286000,RESOLUTION=1920x1080
-streams/f1tv_fhd.m3u8
-' > /srv/www/f1tv.m3u8
 
-      ffmpeg -y -hide_banner -loglevel warning -re -i "$URL" \
--map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -metadata title="$GLOBALNAME" -f flv $OUTPUT \
--map 0:p:5:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 5 -hls_list_size 50 -hls_flags delete_segments /srv/www/streams/f1tv_fhd.m3u8 \
--map 0:p:4:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 5 -hls_list_size 50 -hls_flags delete_segments /srv/www/streams/f1tv_hd.m3u8 \
--map 0:p:3:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 5 -hls_list_size 50 -hls_flags delete_segments /srv/www/streams/f1tv_high.m3u8 \
--map 0:p:0:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 5 -hls_list_size 50 -hls_flags delete_segments /srv/www/streams/f1tv_mid.m3u8 \
--map 0:p:2:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 5 -hls_list_size 50 -hls_flags delete_segments /srv/www/streams/f1tv_low.m3u8 \
--map 0:p:1:v -map "$MAP" -c:v copy -c:a aac -f hls -hls_time 5 -hls_list_size 50 -hls_flags delete_segments /srv/www/streams/f1tv_mini.m3u8
-echo '#EXTM3U
-#EXT-X-VERSION:3
-#EXT-X-STREAM-INF:BANDWIDTH=415000,RESOLUTION=480x270
-streams/idle.m3u8
-' > /srv/www/f1tv.m3u8
+      ffmpegcmd=$(echo 'ffmpeg -y -hide_banner -loglevel warning -re -i "'$URL'" 
+                        -map 0:p:5:v -map "'$MAP'" -c:v copy -c:a aac -metadata title="'$GLOBALNAME'" -f flv "'$OUTPUT'"')
+
+
+      if [ $REPLAY = "true" ];then
+        ffmpegHLSargs=$(echo '-f hls -hls_time 3')
+      else
+        ffmpegHLSargs=$(echo '-f hls -hls_time 8 -hls_list_size 50 -hls_flags delete_segments')
+      fi
+
+      if [ $HLS == "true" ] ; then
+      echo '#EXTM3U
+            #EXT-X-MEDIA:BANDWIDTH=192000,TYPE=AUDIO,GROUP-ID="audio-f1",NAME="FX Audio",LANGUAGE="fx",AUTOSELECT=YES,DEFAULT=YES,URI="streams/f1tv_'$GLOBALNAME'_fx.m3u8"
+            #EXT-X-STREAM-INF:BANDWIDTH=1200000,RESOLUTION=960x540,AUDIO="audio-f1"
+            streams/f1tv_'$GLOBALNAME'_sd.m3u8
+            #EXT-X-STREAM-INF:BANDWIDTH=3730000,RESOLUTION=1280x720,AUDIO="audio-f1"
+            streams/f1tv_'$GLOBALNAME'_hd.m3u8
+            #EXT-X-STREAM-INF:BANDWIDTH=6286000,RESOLUTION=1920x1080,AUDIO="audio-f1"
+            streams/f1tv_'$GLOBALNAME'_fhd.m3u8
+            #EXT-X-MEDIA:BANDWIDTH=192000,TYPE=AUDIO,GROUP-ID="audio-f1",NAME="Deutsch",LANGUAGE="de",AUTOSELECT=YES,DEFAULT=NO,URI="streams/f1tv_'$GLOBALNAME'_deu.m3u8"
+            #EXT-X-MEDIA:BANDWIDTH=192000,TYPE=AUDIO,GROUP-ID="audio-f1",NAME="English",LANGUAGE="en",AUTOSELECT=YES,DEFAULT=NO,URI="streams/f1tv_'$GLOBALNAME'_eng.m3u8"
+            ' > /srv/www/f1tv.m3u8
+        ffmpegcmd+=$(echo  ' -map 0:p:5:v -map "'$MAP'" -c:v copy '$ffmpegHLSargs' "/srv/www/streams/f1tv_'$GLOBALNAME'_fhd.m3u8"
+                            -map 0:p:4:v -map "'$MAP'" -c:v copy '$ffmpegHLSargs' "/srv/www/streams/f1tv_'$GLOBALNAME'_hd.m3u8"
+                            -map 0:p:3:v -map "'$MAP'" -c:v copy '$ffmpegHLSargs' "/srv/www/streams/f1tv_'$GLOBALNAME'_sd.m3u8"
+                            -map 0:m:language:deu? -c:a aac '$ffmpegHLSargs' "/srv/www/streams/f1tv_'$GLOBALNAME'_deu.m3u8"
+                            -map 0:m:language:eng? -c:a aac '$ffmpegHLSargs' "/srv/www/streams/f1tv_'$GLOBALNAME'_eng.m3u8"
+                            -map 0:m:language:fx? -c:a aac '$ffmpegHLSargs' "/srv/www/streams/f1tv_'$GLOBALNAME'_fx.m3u8"')
+      fi
+
+
+
+      echo $ffmpegcmd | bash
+
+
+      if [ $HLS == "true" ] ; then
+      rm /srv/www/streams/f1tv_*
+      fi
+
+      echo '#EXTM3U
+      #EXT-X-VERSION:3
+      #EXT-X-STREAM-INF:BANDWIDTH=415000,RESOLUTION=480x270
+      streams/idle.m3u8
+      ' > /srv/www/f1tv.m3u8
+      
     else
       echo "error"
     fi
@@ -97,7 +122,7 @@ streams/idle.m3u8
   #echo "---- DEBUG ----"
   #echo "AccessToken: $AccessToken"
   #echo "ContentId $ContentId"
-  #echo "URL: $URL"
+  echo "URL: $URL"
   
   #Check status of live session every 5 minutes to avoid ip temp ban
   sleep 5m
