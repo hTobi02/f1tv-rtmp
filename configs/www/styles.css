@@ -1465,6 +1465,32 @@ html {
   }
 }
 
+.btn.loading,.btn.loading:hover {
+  pointer-events: none;
+}
+
+.btn.loading:before {
+  margin-right: .5rem;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 9999px;
+  border-width: 2px;
+  -webkit-animation: spin 2s linear infinite;
+          animation: spin 2s linear infinite;
+  content: "";
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: currentColor;
+  border-right-color: currentColor;
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .btn.loading:before {
+    -webkit-animation: spin 10s linear infinite;
+            animation: spin 10s linear infinite;
+  }
+}
+
 @-webkit-keyframes spin {
   from {
     transform: rotate(0);
@@ -1519,18 +1545,18 @@ html {
           text-decoration-line: underline;
 }
 
-.stats {
-  display: inline-grid;
-  --tw-bg-opacity: 1;
-  background-color: hsl(var(--b1) / var(--tw-bg-opacity));
-  --tw-text-opacity: 1;
-  color: hsl(var(--bc) / var(--tw-text-opacity));
-  border-radius: var(--rounded-box,1rem);
+.btn.loading.btn-circle:before,.btn.loading.btn-square:before {
+  margin-right: 0;
 }
 
-:where(.stats) {
-  grid-auto-flow: column;
-  overflow-x: auto;
+.btn.loading.btn-lg:before,.btn.loading.btn-xl:before {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.btn.loading.btn-sm:before,.btn.loading.btn-xs:before {
+  height: .75rem;
+  width: .75rem;
 }
 
 @-webkit-keyframes button-pop {
@@ -1655,15 +1681,6 @@ html {
   }
 }
 
-:where(.stats)>:not([hidden])~:not([hidden]) {
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-  --tw-divide-y-reverse: 0;
-  border-top-width: calc(0px * calc(1 - var(--tw-divide-y-reverse)));
-  border-bottom-width: calc(0px * var(--tw-divide-y-reverse));
-}
-
 .fixed {
   position: fixed;
 }
@@ -1716,10 +1733,6 @@ html {
 
 .h-auto {
   height: auto;
-}
-
-.max-h-screen {
-  max-height: 100vh;
 }
 
 .min-h-screen {
@@ -1834,11 +1847,6 @@ html {
   color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 
-.text-gray-800 {
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
-}
-
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
@@ -1869,28 +1877,9 @@ html {
   transition-duration: 300ms;
 }
 
-.poster-icon {
-  all: unset;
-}
-
-#player > [data-player] {
-  padding-bottom: 56.25%;
-  height: auto !important;
-}
-
-#player > .fullscreen[data-player] {
-  padding-bottom: 0;
-  height: 100% !important;
-}
-
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.hover\:text-gray-600:hover {
-  --tw-text-opacity: 1;
-  color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 
 .hover\:text-gray-500:hover {

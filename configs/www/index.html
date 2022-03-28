@@ -8,11 +8,15 @@
 
         <link rel="stylesheet" href="styles.css">
 
-        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr/dist/clappr.min.js"></script>
-        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-stats/dist/clappr-stats.min.js"></script>
-        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-nerd-stats/dist/clappr-nerd-stats.min.js"></script>
-        <script type="text/javascript" crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/clappr-pip-plugin/dist/clappr-pip-plugin.js"></script>
-        <script type="text/javascript" src="//cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+
+        <!-- Default theme. ~960B -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@vime/core@^5/themes/default.css"/>
+
+        <!-- Optional light theme (extends default). ~400B -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@vime/core@^5/themes/light.css"/>
+
+        <!-- Library and all of its components are lazy loaded, so nothing to sweat about here. ~3kB -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@vime/core@^5/dist/vime/vime.esm.js"></script>
     </head>
 
     <body class="flex flex-col min-h-screen scroll-smooth">
@@ -34,11 +38,38 @@
                 </div>
             </nav>
         </header>
-        <main class="mt-20 mb-20">
-            <div class="container text-center items-center mx-auto pb-10">
+        <main class="mt-20">
+            <div class="container text-center items-center mx-auto">
                 <div class="text-5xl">Start watching</div>
                 <p class="text-base">Click on the play button to start watching. If you see an error, the stream is not live yet. In this case, try again a little later.</p>
-                <div id="player" class="lg:ml-10 lg:mr-10 mt-10 aspect-video object-contain"></div>
+
+                <vm-player theme="dark" class="lg:ml-10 lg:mr-10 mt-10 aspect-video object-contain" autoplay style="--vm-player-theme: #FFCC00;">
+                    <vm-hls version="latest" poster="assets/default.jpg">
+                        <source data-src="f1tv.m3u8" type="application/x-mpegURL" />
+                    </vm-hls>
+
+                    <vm-ui>
+                        <vm-click-to-play></vm-click-to-play>
+                        <vm-dbl-click-fullscreen></vm-dbl-click-fullscreen>
+                        
+                        <vm-default-settings></vm-default-settings>
+                        <vm-controls full-width active-duration="1800">
+                            <vm-control-group space="bottom">
+                                <vm-scrubber-control></vm-scrubber-control>
+                            </vm-control-group>
+                            <vm-control-group>
+                                <vm-playback-control></vm-playback-control>
+                                <vm-volume-control></vm-volume-control>
+                                <vm-time-progress separator="/"></vm-time-progress>
+                                <vm-control-spacer></vm-control-spacer>
+                                <vm-live-indicator></vm-live-indicator>
+                                <vm-pip-control></vm-pip-control>
+                                <vm-settings-control></vm-settings-control>
+                                <vm-fullscreen-control></vm-fullscreen-control>
+                            </vm-control-group>
+                        </vm-controls>
+                    </vm-ui>
+                </vm-player>
             </div>
         </main>
         <footer class="bg-gray-200 text-center lg:text-left dark:bg-gray-900 fixed inset-x-0 bottom-0">
@@ -48,35 +79,4 @@
             </div>
         </footer>
     </body>
-        
-    <script>
-        new Clappr.Player({
-            //** Standard clappr.io Options **
-            // Use custom source
-            sources: ["f1tv.m3u8"],
-
-            // Plugins
-            plugins: [ClapprNerdStats, ClapprStats, ClapprPIPPlugin, LevelSelector],
-
-            clapprNerdStats: {
-                iconPosition: 'none'
-            },
-
-            // Enable m3u8 preload to NOT prevent error on page load
-            hlsPlayback: {
-                preload: true
-            },
-
-            // Set a custom poster
-            poster: "assets/default.jpg",
-
-            // Assign parent by id
-            parentId: "#player",
-
-            // Set dimensions and media control delay
-            height: "100%",
-            width: "100%",
-            hideMediaControlDelay: 1000
-        })
-    </script>
 </html>

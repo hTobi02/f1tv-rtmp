@@ -36,5 +36,5 @@ module.exports = {
       }
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"),('@vidstack/player/tailwind.cjs')],
 }
